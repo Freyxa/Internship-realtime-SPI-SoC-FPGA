@@ -59,8 +59,8 @@ begin
                         -- Wait for start to go low before allowing a new cycle
                         if start = '0' then
                             state <= IDLE;
-                            m_axis_tvalid <= '0';
-                            m_axis_tlast <= '0';
+                            --m_axis_tvalid <= '0';
+                            --m_axis_tlast <= '0';
                         end if;
                 end case;
             end if;
