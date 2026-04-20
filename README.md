@@ -4,6 +4,46 @@
 ### 2. Pynq introduction
 ### 3. AXI stream 
 ### 4. Communication Zynq <-> Host PC
+
+Setup CPU communication to PC:
+
+First step on Powershell PC:
+
+```python
+import socket
+# Use 0.0.0.0 to listen on all available network interfaces
+server_address = ('0.0.0.0', 65432)
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server.bind(server_address)
+server.listen(1)
+
+print("Waiting for Zynq connection...")
+conn, addr = server.accept()
+print(f"Connected by {addr}")
+
+data = conn.recv(1024)
+print(f"Received: {data.decode()}")
+conn.close()
+```
+
+
+Second step on PYNQ:
+
+```python
+import socket
+address = ("10.31.104.206", 65432) 
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+try:
+    client.connect(address)
+    client.sendall(b"Hello from Zynq CPU!")
+    print("Message sent successfully!")
+except ConnectionRefusedError:
+    print("Connection failed. Is the server running on the PC?")
+finally:
+    client.close()
+```
+
+
 Setup FPGA communication to PC:
 
 First step on Powershell PC:
