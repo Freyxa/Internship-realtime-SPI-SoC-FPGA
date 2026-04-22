@@ -1,9 +1,9 @@
 # Internship-realtime-SPI-SoC-FPGA
 ## Timeline:
-### 1. Get familiar with the Zynq UltraScale+ using Xilinx Vivado and PYNQ with support from "The FPGA Programming Handbook" by Frank Bruno and Guy Eschemann
-### 2. Pynq introduction
-### 3. AXI stream 
-### 4. Communication Zynq <-> Host PC
+## 1. Get familiar with the Zynq UltraScale+ using Xilinx Vivado and PYNQ with support from "The FPGA Programming Handbook" by Frank Bruno and Guy Eschemann
+## 2. Pynq introduction
+## 3. AXI stream 
+## 4. Communication Zynq <-> Host PC
 
 Setup CPU communication to PC:
 
@@ -145,20 +145,24 @@ Sent 2000 packets (8.00 MB)
 Total Time: 0.4944 seconds
 Average Throughput: 129.44 Mbps
 ```
-### FFT IP
+## FFT IP
 
-## FFT IP test on Zynq ultrascale+
+### FFT IP test on Zynq ultrascale+
 
 1. Vivado bloc design
    
 <img width="2759" height="1257" alt="image" src="https://github.com/user-attachments/assets/24e860be-da50-4eea-8e96-1c3aa4474fbb" />
 
+
 2. FFT IP config
+
 
 <img width="2373" height="1548" alt="image" src="https://github.com/user-attachments/assets/a98abbfd-fb34-47aa-bf8e-459aac49b1cb" />
 <img width="2383" height="1557" alt="image" src="https://github.com/user-attachments/assets/557d590d-8eaa-49f1-80f9-f9c9011b6c77" />
 
+
 3. Jupyter notebook scripting on PYNQ
+
 
 ```python
 import numpy as np
