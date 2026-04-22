@@ -145,3 +145,115 @@ Sent 2000 packets (8.00 MB)
 Total Time: 0.4944 seconds
 Average Throughput: 129.44 Mbps
 ```
+### FFT IP
+
+1. FFT IP test on Zynq ultrascale+
+
+```python
+import numpy as np
+from pynq import allocate, Overlay
+import plotly.graph_objects as go
+import math
+
+# Load Overlay
+overlay = Overlay('design_fft.bit')
+dma = overlay.axi_dma_0 
+
+# Parameters 
+FFT_Size = 1024
+SCALE = 16000  # Q15-like amplitude (safe margin from overflow)
+
+# Buffers 
+TX_buffer = allocate(shape=(FFT_Size,), dtype=np.uint32)
+RX_buffer = allocate(shape=(FFT_Size,), dtype=np.uint32)
+
+print("TX Buffer Address:", hex(TX_buffer.physical_address))
+print("RX Buffer Address:", hex(RX_buffer.physical_address))
+
+# Generate Signals
+sinc_LUT = np.zeros(FFT_Size, dtype=np.int16)
+rect_LUT = np.zeros(FFT_Size, dtype=np.int16)
+cos_LUT  = np.zeros(FFT_Size, dtype=np.int16)
+
+center = FFT_Size // 2
+
+for i in range(FFT_Size):
+    #  Proper centered sinc 
+    x = i - center
+    
+    if x == 0:
+        sinc_val = 1.0
+    else:
+        sinc_val = np.sin(np.pi * x / 32) / (np.pi * x / 32)
+
+    sinc_LUT[i] = np.int16(round(SCALE * sinc_val))
+
+    #  Rectangular signal 
+    if (center - 12) < i < (center + 12):
+        rect_LUT[i] = np.int16(30000)
+    else:
+        rect_LUT[i] = np.int16(0)
+
+    #  Cosine (for validation) 
+    angle = (8 * 2.0 * math.pi * i) / FFT_Size
+    cos_LUT[i] = np.int16(round(SCALE * np.cos(angle)))
+
+#  Select signal to test 
+signal = sinc_LUT   # <-- change to rect_LUT or cos_LUT for testing
+
+#  Pack into TX buffer 
+for i in range(FFT_Size):
+    real = np.int16(signal[i])
+    imag = np.int16(0)
+
+    TX_buffer[i] = (np.uint32(imag & 0xFFFF) << 16) | (np.uint32(real & 0xFFFF))
+
+#  DMA Transfer
+dma.sendchannel.transfer(TX_buffer)
+dma.recvchannel.transfer(RX_buffer)
+
+dma.sendchannel.wait()
+dma.recvchannel.wait()
+
+#  Unpack FFT output 
+real_buffer = np.zeros(FFT_Size, dtype=np.int16)
+imag_buffer = np.zeros(FFT_Size, dtype=np.int16)
+abs_buffer  = np.zeros(FFT_Size)
+
+for i in range(FFT_Size):
+    real_buffer[i] = np.int16(RX_buffer[i] & 0xFFFF)
+    imag_buffer[i] = np.int16((RX_buffer[i] >> 16) & 0xFFFF)
+
+    abs_buffer[i] = math.sqrt(
+        float(real_buffer[i])**2 + float(imag_buffer[i])**2
+    )
+
+# Normalize for visualization
+abs_buffer /= np.max(abs_buffer)
+
+#  Reference FFT (NumPy)
+ref_fft = np.abs(np.fft.fftshift(np.fft.fft(signal)))
+ref_fft /= np.max(ref_fft)
+
+# Plot Time Domain 
+fig = go.Figure()
+fig.add_trace(go.Scatter(y=signal, mode='lines', name='Input Signal'))
+fig.update_layout(title='Time Domain Signal', xaxis_title='Index', yaxis_title='Amplitude')
+fig.show()
+
+#  Plot FPGA FFT 
+fig = go.Figure()
+fig.add_trace(go.Scatter(y=np.fft.fftshift(abs_buffer), mode='lines', name='FPGA FFT'))
+fig.update_layout(title='FPGA FFT Output', xaxis_title='Frequency Bin', yaxis_title='Normalized Amplitude')
+fig.show()
+
+#  Plot NumPy FFT
+fig = go.Figure()
+fig.add_trace(go.Scatter(y=ref_fft, mode='lines', name='NumPy FFT (Reference)'))
+fig.update_layout(title='Reference FFT (NumPy)', xaxis_title='Frequency Bin', yaxis_title='Normalized Amplitude')
+fig.show()
+```
+<img width="983" height="525" alt="newplot" src="https://github.com/user-attachments/assets/89dcaf8e-8006-4e92-9b1e-7d37508bd6d0" />
+<img width="983" height="525" alt="newplot(1)" src="https://github.com/user-attachments/assets/dc7a05d5-a403-4bcf-8ebe-211e392e516e" />
+<img width="983" height="525" alt="newplot(2)" src="https://github.com/user-attachments/assets/569e62a5-8c60-4ac4-bc69-1b0bd0c0fc67" />
+
