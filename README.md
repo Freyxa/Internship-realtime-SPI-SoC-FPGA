@@ -149,23 +149,13 @@ Average Throughput: 129.44 Mbps
 
 ### FFT IP test on Zynq ultrascale+
 
-1. Vivado bloc design
+#### 1. Vivado bloc design and FFT IP configuration
    
 <img width="2759" height="1257" alt="image" src="https://github.com/user-attachments/assets/24e860be-da50-4eea-8e96-1c3aa4474fbb" />
-
-
-
-
-2. FFT IP config
-
-
 <img width="2373" height="1548" alt="image" src="https://github.com/user-attachments/assets/a98abbfd-fb34-47aa-bf8e-459aac49b1cb" />
 <img width="2383" height="1557" alt="image" src="https://github.com/user-attachments/assets/557d590d-8eaa-49f1-80f9-f9c9011b6c77" />
 
-
-
-
-3. Jupyter notebook scripting on PYNQ
+#### 2. Jupyter notebook scripting on PYNQ
 
 
 ```python
