@@ -266,3 +266,8 @@ fig.show()
 <img width="983" height="525" alt="newplot(1)" src="https://github.com/user-attachments/assets/dc7a05d5-a403-4bcf-8ebe-211e392e516e" />
 <img width="983" height="525" alt="newplot(2)" src="https://github.com/user-attachments/assets/569e62a5-8c60-4ac4-bc69-1b0bd0c0fc67" />
 
+## 2D FFT 
+
+### 2D FFT with a FSM for input control
+
+
