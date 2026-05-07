@@ -1,7 +1,42 @@
 # Internship-realtime-SPI-SoC-FPGA
 ## Timeline:
 ## 1. Get familiar with the Zynq UltraScale+ using Xilinx Vivado and PYNQ with support from "The FPGA Programming Handbook" by Frank Bruno and Guy Eschemann
-## 2. Pynq introduction
+## 2. PYNQ and Jupyter Notebooks on Zynq Ultrascale+
+
+PYNQ (Python Productivity for Zynq) is an open-source framework from AMD/Xilinx that enables the use of the Python language and its ecosystem on Zynq UltraScale+ MPSoC devices. By leveraging an Ubuntu-based Linux environment, PYNQ allows developers to interface with the Programmable Logic (PL) through high-level abstractions rather than traditional hardware description languages for every interaction.
+
+Key Components:
+
+    Overlays: These are specialized hardware designs (bitstreams) that are treated as software libraries. On the Zynq UltraScale+, these overlays can be loaded dynamically,      allowing the FPGA fabric to be reconfigured at runtime through Python commands.
+
+    Python API: PYNQ provides a set of drivers and libraries to manage hardware interfaces such as DMA (Direct Memory Access), GPIO, and interrupt controllers. This is           critical for moving data efficiently between the photodetector interface in the PL and the reconstruction algorithms in the PS.
+
+    Resource Management: The framework manages the complex memory mapping and driver communication between the ARM Cortex-A53 cores and the FPGA fabric, providing a seamless     path for data-heavy applications.
+
+Role of Jupyter Notebooks:
+
+In the Zynq UltraScale+ ecosystem, the Jupyter Notebook serves as the primary integrated development environment (IDE) and documentation tool. It runs as a web server directly on the ARM processing system.
+Utility for Project Tracking
+
+    Interactive Execution: Code can be executed in discrete blocks, allowing for the testing of hardware acquisition independently from reconstruction math.
+
+    Real-time Data Visualization: Libraries such as Matplotlib and NumPy are used within the notebook to visualize 1D signal streams and 2D reconstructed images immediately      after data acquisition.
+
+    Documentation: Markdown support allows for the inclusion of technical specifications, mathematical derivations, and performance metrics alongside the functional code.
+
+Application to Single-Pixel Imaging:
+
+The Zynq UltraScale+ architecture is well suited for single-pixel imaging due to the high-bandwidth AXI4 interconnects between the Processing System (PS) and Programmable Logic (PL).
+Functional Breakdown
+
+    Programmable Logic: Responsible for the high-speed synchronization of the spatial light modulator and the digitization of the photodiode signal.
+
+    Data Transport: DMA engines are utilized to stream high-speed measurements into DDR memory.
+
+    Processing System: The ARM cores run the PYNQ framework to orchestrate the experiment and execute the reconstruction algorithms.
+
+    Jupyter Interface: Provides the front-end for controlling experiment parameters and reviewing the resulting image quality.
+
 ## 3. AXI stream 
 ### Introduction of AXI stream:
 
