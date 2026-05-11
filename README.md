@@ -313,6 +313,11 @@ fig.show()
 
 ### Vitis HLS
 ### Examples
+
+### 1D FFT on Vitis HLS using C/C++
+
+<img width="1305" height="537" alt="image" src="https://github.com/user-attachments/assets/06d7fab8-5fb0-4bac-898d-68b07f53e333" />
+
 ### 2D FFT on Vitis HLS using C/C++
 
 
