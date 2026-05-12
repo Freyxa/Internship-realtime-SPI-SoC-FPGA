@@ -3,7 +3,7 @@
 void proc_fe(
     bool direction,
     hls::stream<config_t> &config_s,
-    axi_word_t in[FFT_LENGTH],        // 64-bit AXI type
+    axi_word_t in[FFT_LENGTH],       
     hls::stream<cmpxData> &out_s)
 {
     config_t config;
@@ -11,7 +11,7 @@ void proc_fe(
     config.setSch(0x2A);
     config_s.write(config);
 
-    // Single 64-bit read per iteration â†’ II=1
+    
     for (int i = 0; i < FFT_LENGTH; i++) {
         #pragma HLS PIPELINE II=1
         out_s.write(axi_to_cmpx(in[i]));
@@ -22,9 +22,9 @@ void proc_be(
     hls::stream<status_t> &status_in_s,
     bool &ovflo,
     hls::stream<cmpxData> &in_s,
-    axi_word_t out[FFT_LENGTH])       // 64-bit AXI type
+    axi_word_t out[FFT_LENGTH])       
 {
-    // Single 64-bit write per iteration â†’ II=1
+    
     for (int i = 0; i < FFT_LENGTH; i++) {
         #pragma HLS PIPELINE II=1
         out[i] = cmpx_to_axi(in_s.read());
