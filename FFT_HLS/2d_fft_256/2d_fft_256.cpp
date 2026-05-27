@@ -79,7 +79,7 @@ static void run_pass1(hls::stream<dma_axis> &in_stream,
     hls::stream<fft_config_t> cfg1_s  ("cfg1_s");
     hls::stream<fft_status_t> sts1_s  ("sts1_s");
 
-    #pragma HLS STREAM variable=fft1_in  depth=256  // ← 128→256
+    #pragma HLS STREAM variable=fft1_in  depth=256 
     #pragma HLS STREAM variable=fft1_out depth=256
     #pragma HLS STREAM variable=cfg1_s   depth=256
     #pragma HLS STREAM variable=sts1_s   depth=256
